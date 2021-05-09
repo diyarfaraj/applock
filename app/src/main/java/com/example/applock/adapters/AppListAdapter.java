@@ -3,6 +3,7 @@ package com.example.applock.adapters;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.graphics.drawable.Drawable;
 import android.media.TimedText;
 import android.service.controls.Control;
 import android.view.LayoutInflater;
@@ -22,7 +23,7 @@ import java.util.List;
 public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHolder> {
     List<AppInfo> appList;
     Context context;
-    AppListAdapter(List<AppInfo> appInfos){
+    public AppListAdapter(List<AppInfo> appInfos){
     this.appList = appInfos;
     }
     @NonNull
@@ -40,6 +41,24 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.appLogo.setImageDrawable(appList.get(position).getAppLogo());
         holder.appName.setText(appList.get(position).getAppName());
+        if(appList.get(position).isAppStatus()){
+            holder.appStatus.setImageResource(R.drawable.ic_baseline_lock_24);
+        } else {
+            holder.appStatus.setImageResource(R.drawable.ic_baseline_lock_open_24);
+        }
+
+        holder.appStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(appList.get(position).isAppStatus()){
+                    appList.get(position).setAppStatus(false);
+                    holder.appStatus.setImageResource(R.drawable.ic_baseline_lock_open_24);
+                } else {
+                    appList.get(position).setAppStatus(true);
+                    holder.appStatus.setImageResource(R.drawable.ic_baseline_lock_24);
+                }
+            }
+        });
     }
 
     @Override
